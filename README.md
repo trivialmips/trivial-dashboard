@@ -9,7 +9,6 @@ The CMake configuration expects an output from buildroot. You may alter the path
 buildroot should be configured to contain QtCore and C++ support for host toolchain at least.
 
 ```bash
-ln -s /foo/bar/buildroot /tmp/buildroot
 cd build && cmake -DCMAKE_TOOLCHAIN_FILE=../buildroot.toolchain.cmake ..
 make
 ```
