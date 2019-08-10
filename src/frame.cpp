@@ -10,6 +10,10 @@ Frame::Frame() {
   this->setWindowTitle("Trivial-Dashboard");
 
   auto hi = new QLabel(this);
+  auto hiPalette = hi->palette();
+  hiPalette.setColor(hi->backgroundRole(), Qt::red);
+  hi->setPalette(hiPalette);
+  hi->setAutoFillBackground(true);
   hi->setText("Hello, Nontrivial-MIPS!");
 
   auto layout = new QBoxLayout(QBoxLayout::LeftToRight);
