@@ -10,8 +10,11 @@ endif()
 SET(CMAKE_C_COMPILER "${TDB_BR_OUTPUT}/host/bin/mipsel-linux-gcc")
 SET(CMAKE_CXX_COMPILER "${TDB_BR_OUTPUT}/host/bin/mipsel-linux-g++")
 
-SET(CMAKE_SYSROOT "${TDB_BR_OUTPUT}/target")
-SET(CMAKE_FIND_ROOT_PATH "${TDB_BR_OUTPUT}/target")
+# SET(CMAKE_SYSROOT "${TDB_BR_OUTPUT}/target")
+
+# Find in staging directory, because the cmake package configurations are not included
+# in the target direcotry
+SET(CMAKE_FIND_ROOT_PATH "${TDB_BR_OUTPUT}/staging")
 
 # search for programs in the build host directories
 SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
