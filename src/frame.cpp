@@ -6,7 +6,9 @@
 #include <QWidget>
 #include <QLabel>
 #include <QColor>
+
 #include <iostream>
+#include <sstream>
 
 using namespace TDB;
 using namespace std;
@@ -15,7 +17,6 @@ Frame::Frame() {
   this->setWindowTitle("Trivial-Dashboard");
 
   auto hi = new QLabel(this);
-  hi->setText("Hello, Nontrivial-MIPS!");
   hi->setAlignment(Qt::AlignCenter);
 
   auto layout = new QBoxLayout(QBoxLayout::LeftToRight);
@@ -35,5 +36,8 @@ Frame::Frame() {
   auto size = QApplication::desktop()->availableGeometry(this).size();
   this->resize(size);
 
-  cout<<size.width()<<"x"<<size.height()<<endl;
+  stringstream ss;
+  ss<<size.width()<<"x"<<size.height();
+
+  hi->setText(QString("Hello, Nontrivial-MIPS!\n") + ss.str().c_str());
 }
