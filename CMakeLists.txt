@@ -19,3 +19,7 @@ include_directories(src)
 add_executable(tdb ${SRC_LIST} ${HDR_LIST})
 
 target_link_libraries(tdb Qt5::Core Qt5::Widgets Threads::Threads)
+
+add_custom_command(TARGET tdb PRE_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_directory
+  ${CMAKE_SOURCE_DIR}/res $<TARGET_FILE_DIR:tdb>/res)
