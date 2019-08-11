@@ -6,6 +6,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QColor>
+#include <QPushButton>
 
 #include <iostream>
 #include <sstream>
@@ -19,10 +20,14 @@ Frame::Frame() {
   auto hi = new QLabel(this);
   hi->setAlignment(Qt::AlignCenter);
 
-  auto layout = new QBoxLayout(QBoxLayout::LeftToRight);
+  auto btn = new QPushButton("Get my out of here");
+  connect(btn, SIGNAL(clicked()), this, SLOT(exit()));
+
+  auto layout = new QBoxLayout(QBoxLayout::TopToBottom);
   layout->setSpacing(20);
 
   layout->addWidget(hi);
+  layout->addWidget(btn);
 
   auto container = new QWidget(this);
   container->setLayout(layout);
@@ -40,4 +45,8 @@ Frame::Frame() {
   ss<<size.width()<<"x"<<size.height();
 
   hi->setText(QString("Hello, Nontrivial-MIPS!\n") + ss.str().c_str());
+}
+
+void Frame::exit() {
+  QApplication::quit();
 }

@@ -9,6 +9,9 @@ namespace TDB {
 
     public:
       Frame();
+
+    public slots:
+      void exit();
   };
 }
 
