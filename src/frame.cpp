@@ -1,11 +1,15 @@
 #include "frame.h"
 
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QBoxLayout>
 #include <QWidget>
 #include <QLabel>
 #include <QColor>
+#include <iostream>
 
 using namespace TDB;
+using namespace std;
 
 Frame::Frame() {
   this->setWindowTitle("Trivial-Dashboard");
@@ -28,5 +32,8 @@ Frame::Frame() {
   container->setAutoFillBackground(true);
 
   this->setCentralWidget(container);
-  this->resize(640, 480);
+  auto size = QApplication::desktop()->availableGeometry(this).size();
+  this->resize(size);
+
+  cout<<size.width()<<"x"<<size.height()<<endl;
 }
