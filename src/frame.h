@@ -1,6 +1,8 @@
 #ifndef __FRAME_H__
 #define __FRAME_H__
 
+#include "state.h"
+
 #include <QMainWindow>
 
 namespace TDB {
@@ -9,6 +11,7 @@ namespace TDB {
 
     public:
       Frame();
+      State state;
 
     public slots:
       void exit();

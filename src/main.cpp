@@ -1,4 +1,5 @@
 #include "frame.h"
+#include "state.h"
 
 #include <QApplication>
 #include <QFontDatabase>
@@ -16,9 +17,13 @@ int main(int argc, char **argv) {
   font.setStyleHint(QFont::Monospace);
   QApplication::setFont(font);
 
-  // Instantiate main frame
+  // Instantiate main frame, initialize state
   TDB::Frame frame;
+  TDB::State &state = frame.state;
+  state.open_local_session();
+  state.start_timer();
   frame.show();
+
 
   return app.exec();
 }
