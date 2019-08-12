@@ -3,6 +3,8 @@
 
 #include "state.h"
 
+#include "widgets/cpu.h"
+
 #include <QMainWindow>
 
 namespace TDB {
@@ -15,6 +17,10 @@ namespace TDB {
 
     public slots:
       void exit();
+      void tick();
+
+    private:
+      Widgets::CPU *cpu;
   };
 }
 

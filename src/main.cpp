@@ -20,8 +20,6 @@ int main(int argc, char **argv) {
   // Instantiate main frame, initialize state
   TDB::Frame frame;
   TDB::State &state = frame.state;
-  state.open_local_session();
-  state.start_timer();
   frame.show();
 
 

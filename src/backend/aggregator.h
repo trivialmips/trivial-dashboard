@@ -7,7 +7,7 @@
 
 namespace TDB {
   struct core_util_t {
-    uint64_t user, nice, system, idle, iowait, irq, softirq;
+    uint64_t total, user, nice, system, idle, iowait, irq, softirq;
   };
 
   struct cpu_util_t {

@@ -8,20 +8,16 @@
 #include <QObject>
 
 namespace TDB {
-  class Frame; // Resolve circular dependency
-
   class State : public QObject{
     Q_OBJECT // We need QTimer, unfortunately
 
-    friend Frame;
-
     public:
-      void start_timer();
+      void update();
       void open_local_session();
+      std::vector<std::shared_ptr<Session>>& get_sessions();
 
     private:
-      std::vector<std::unique_ptr<Session>> sessions;
-      Frame *frame;
+      std::vector<std::shared_ptr<Session>> sessions;
   };
 }
 
