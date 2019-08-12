@@ -25,6 +25,7 @@ long double _total, _req; // temp var
 void CPU::paintEvent(QPaintEvent *e) {
   cout<<"REPAINT"<<endl;
   QPainter painter(this);
+  painter.setRenderHint(QPainter::Antialiasing);
   QRect cr = contentsRect();
 
   QBrush bgbrush(QColor("#073642"));

@@ -16,14 +16,9 @@ core_util_t core_stat_t::operator-(const core_stat_t &ano) const {
     .irq     = irq     - ano.irq,
     .softirq = softirq - ano.softirq,
   };
-  cout<<"SELF: "<<user<<endl;
-  cout<<"ANO: "<<ano.user<<endl;
-  cout<<"DIFF: "<<result.user<<endl;
 
   result.total = result.user + result.nice + result.system
     + result.idle + result.iowait + result.irq + result.softirq;
-
-  cout<<"TOTAL: "<<result.total<<endl;
 
   return result;
 }

@@ -12,7 +12,7 @@ namespace TDB::Widgets {
     Q_OBJECT
 
     public:
-      CPU(const std::shared_ptr<Session> session, int core = 0);
+      CPU(const std::shared_ptr<Session> session, int core = -1);
 
     protected:
       void paintEvent(QPaintEvent *e);

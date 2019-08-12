@@ -11,14 +11,18 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 find_package(Threads REQUIRED)
+find_package(LibSSH REQUIRED)
 
 file(GLOB_RECURSE SRC_LIST src/*.cpp)
 file(GLOB_RECURSE HDR_LIST src/*.h)
 
 include_directories(src)
+include_directories(${LIBSSH_INCLUDE})
+
 add_executable(tdb ${SRC_LIST} ${HDR_LIST})
 
 target_link_libraries(tdb Qt5::Core Qt5::Widgets Threads::Threads)
+target_link_libraries(tdb ${LIBSSH_LIBRARIES})
 
 add_custom_command(TARGET tdb PRE_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy_directory
