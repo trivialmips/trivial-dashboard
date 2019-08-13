@@ -4,6 +4,7 @@
 #include "state.h"
 
 #include "widgets/cpu.h"
+#include "widgets/network.h"
 
 #include <QMainWindow>
 
@@ -21,6 +22,7 @@ namespace TDB {
 
     private:
       Widgets::CPU *cpu;
+      Widgets::Network *network;
   };
 }
 

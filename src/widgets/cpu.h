@@ -6,13 +6,14 @@
 #include <memory>
 
 #include <QWidget>
+#include <QLayout>
 
 namespace TDB::Widgets {
   class CPU : public QWidget {
     Q_OBJECT
 
     public:
-      CPU(const std::shared_ptr<Session> session, int core = -1);
+      CPU(QWidget *parent, const std::shared_ptr<Session> session, int core = -1);
 
     protected:
       void paintEvent(QPaintEvent *e);
@@ -20,6 +21,13 @@ namespace TDB::Widgets {
     private:
       const std::shared_ptr<Session> _session;
       int _core;
+  };
+
+  class CPULegend : public QWidget {
+    Q_OBJECT
+
+    public:
+      CPULegend(QWidget *parent);
   };
 }
 #endif // __CPU_H__

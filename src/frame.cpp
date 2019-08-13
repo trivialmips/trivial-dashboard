@@ -30,16 +30,28 @@ Frame::Frame() {
   connect(timer, SIGNAL(timeout()), this, SLOT(tick()));
   timer->start();
 
-  cpu = new Widgets::CPU(this->state.get_sessions()[0]);
-
   auto btn = new QPushButton("Get my out of here");
   connect(btn, SIGNAL(clicked()), this, SLOT(exit()));
 
   auto layout = new QBoxLayout(QBoxLayout::TopToBottom);
-  layout->setSpacing(20);
+  layout->setSpacing(5);
 
-  layout->addWidget(cpu);
-  layout->addWidget(btn);
+  // Top
+  auto top = new QGridLayout(this);
+  auto cpu_region = new QBoxLayout(QBoxLayout::TopToBottom);
+  cpu_region->setSpacing(5);
+  cpu = new Widgets::CPU(this, this->state.get_sessions()[0]);
+  auto cpu_legend = new Widgets::CPULegend(this);
+  cpu_region->addWidget(cpu, 1);
+  cpu_region->addWidget(cpu_legend);
+  top->addLayout(cpu_region, 0, 0);
+
+  network = new Widgets::Network(this, this->state.get_sessions()[0]);
+  top->addWidget(network, 1, 0);
+
+  top->setRowStretch(0, 1);
+  top->setRowStretch(1, 1);
+  layout->addLayout(top);
 
   auto container = new QWidget(this);
   container->setLayout(layout);
@@ -67,4 +79,5 @@ void Frame::exit() {
 void Frame::tick() {
   this->state.update();
   cpu->update();
+  network->update();
 }

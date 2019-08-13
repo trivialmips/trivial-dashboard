@@ -16,6 +16,11 @@ void State::open_local_session() {
   this->sessions.emplace_back(new Session(std::move(exec)));
 }
 
+void State::open_ssh_session(std::string host, std::string user, int port) {
+  unique_ptr<SSHExecutor> exec(new SSHExecutor(host, user, port));
+  this->sessions.emplace_back(new Session(std::move(exec)));
+}
+
 std::vector<std::shared_ptr<Session>>& State::get_sessions() {
   return sessions;
 }

@@ -1,6 +1,8 @@
 #include "widgets/cpu.h"
 
 #include <QPainter>
+#include <QLabel>
+
 #include <optional>
 #include <iostream>
 
@@ -10,7 +12,7 @@ using namespace std;
 
 using namespace TDB::Widgets;
 
-CPU::CPU(const std::shared_ptr<Session> session, int core) : _session(session), _core(core) {}
+CPU::CPU(QWidget *parent, const std::shared_ptr<Session> session, int core) : QWidget(parent), _session(session), _core(core) {}
 
 long double _total, _req; // temp var
 #define FETCH_FIELD(util, no, field, frac) \
@@ -23,7 +25,6 @@ long double _total, _req; // temp var
   frac = _req / _total;
 
 void CPU::paintEvent(QPaintEvent *e) {
-  cout<<"REPAINT"<<endl;
   QPainter painter(this);
   painter.setRenderHint(QPainter::Antialiasing);
   QRect cr = contentsRect();
@@ -89,4 +90,52 @@ void CPU::paintEvent(QPaintEvent *e) {
 
     last_util = { tick->cpu_util };
   }
+}
+
+CPULegend::CPULegend(QWidget *parent) : QWidget(parent) {
+  auto layout = new QBoxLayout(QBoxLayout::LeftToRight);
+
+  layout->setContentsMargins(0,0,0,0);
+  layout->setSpacing(5);
+  layout->setAlignment(Qt::AlignCenter);
+
+  // Centering
+  layout->addStretch(1);
+
+  QWidget *box;
+  QLabel *label;
+  QPalette palette;
+  QFont font;
+
+#define ADD_LEGEND(name, color) \
+  box = new QWidget(this);\
+  box->setFixedSize(10, 10);\
+  palette = box->palette();\
+  palette.setColor(box->backgroundRole(), "#" color);\
+  box->setPalette(palette);\
+  box->setAutoFillBackground(true);\
+  layout->addWidget(box);\
+  \
+  label = new QLabel(this);\
+  label->setText(#name);\
+  font = label->font(); \
+  font.setPixelSize(12); \
+  label->setFont(font); \
+  layout->addWidget(label);\
+  layout->addSpacing(10); \
+
+  layout->addSpacing(10);
+
+  ADD_LEGEND(user, "268bd2");
+  ADD_LEGEND(nice, "2aa198");
+  ADD_LEGEND(system, "b58900");
+  ADD_LEGEND(idle, "859900");
+  ADD_LEGEND(iowait, "dc322f");
+  ADD_LEGEND(irq, "d33682");
+  ADD_LEGEND(softirq, "6c71c4");
+
+  // Centering
+  layout->addStretch(1);
+
+  this->setLayout(layout);
 }

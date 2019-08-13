@@ -5,6 +5,7 @@
 
 #include <memory>
 #include <vector>
+#include <string>
 #include <QObject>
 
 namespace TDB {
@@ -14,6 +15,7 @@ namespace TDB {
     public:
       void update();
       void open_local_session();
+      void open_ssh_session(std::string host, std::string user, int port = 22);
       std::vector<std::shared_ptr<Session>>& get_sessions();
 
     private:

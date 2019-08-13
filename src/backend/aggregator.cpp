@@ -37,18 +37,41 @@ cpu_util_t cpu_stat_t::operator-(const cpu_stat_t &ano) const {
   return result;
 }
 
+if_util_t if_stat_t::operator-(const if_stat_t &ano) const {
+  if_util_t result{
+    .rx = rx - ano.rx,
+    .tx = tx - ano.tx,
+  };
+
+  return result;
+}
+
+network_util_t network_stat_t::operator-(const network_stat_t &ano) const {
+  // Assumes the core count doesn't change, or we are extremely screwed
+
+  network_util_t result;
+
+  for(const auto &[name, if_stat] : ifs)
+    result.ifs.insert({ name, if_stat - ano.ifs.at(name) });
+
+  return result;
+}
+
 Aggregator::Aggregator(std::unique_ptr<Executor> exec)
-  : _exec(std::move(exec)), _last_cpu_stat(fetch_cpu_stat()) {
+  : _exec(std::move(exec)), _last_cpu_stat(fetch_cpu_stat()), _last_network_stat(fetch_network_stat()) {
   }
 
 tick_t Aggregator::tick() {
   cpu_stat_t cpu_stat = this->fetch_cpu_stat();
+  network_stat_t network_stat = this->fetch_network_stat();
 
   tick_t result {
     .cpu_util = cpu_stat - _last_cpu_stat,
+    .network_util = network_stat - _last_network_stat,
   };
 
   _last_cpu_stat = cpu_stat;
+  _last_network_stat = std::move(network_stat);
 
   return result;
 }
@@ -89,6 +112,29 @@ cpu_stat_t Aggregator::fetch_cpu_stat() {
     } else {
       std::getline(ss, junk);
     }
+  }
+
+  return result;
+}
+
+network_stat_t Aggregator::fetch_network_stat() {
+  string stat = _exec->exec("cat /proc/net/dev | tail +3");
+  network_stat_t result;
+  stringstream ss(stat);
+  string junk, name;
+
+  while(ss) {
+    if_stat_t if_stat;
+    ss>>name;
+    if(!ss) break;
+
+    name.pop_back();
+    cout<<"GOT IF: "<<name<<endl;
+
+    ss>>if_stat.rx>>junk>>junk>>junk>>junk>>junk>>junk>>junk>>if_stat.tx;
+    std::getline(ss, junk);
+
+    result.ifs.insert({ name, if_stat });
   }
 
   return result;

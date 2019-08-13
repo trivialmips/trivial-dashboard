@@ -5,6 +5,7 @@
 #include <memory>
 #include <stdexcept>
 #include <array>
+#include <string_view>
 
 using namespace TDB;
 using namespace std;
@@ -85,11 +86,15 @@ string SSHExecutor::exec(string cmd) {
       throw std::runtime_error("SHH transfer error");
     }
 
-    result += buffer.data();
+    result += string_view(buffer.data(), bytes);
   }
 
   ssh_channel_send_eof(chan);
   ssh_channel_close(chan);
   ssh_channel_free(chan);
+
+  cout<<"READ:"<<endl;
+  cout<<result<<endl;
+
   return result;
 }
