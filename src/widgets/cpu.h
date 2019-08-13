@@ -22,12 +22,5 @@ namespace TDB::Widgets {
       const std::shared_ptr<Session> _session;
       int _core;
   };
-
-  class CPULegend : public QWidget {
-    Q_OBJECT
-
-    public:
-      CPULegend(QWidget *parent);
-  };
 }
 #endif // __CPU_H__

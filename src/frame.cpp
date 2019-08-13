@@ -1,4 +1,5 @@
 #include "frame.h"
+#include "widgets/legend.h"
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -41,13 +42,29 @@ Frame::Frame() {
   auto cpu_region = new QBoxLayout(QBoxLayout::TopToBottom);
   cpu_region->setSpacing(5);
   cpu = new Widgets::CPU(this, this->state.get_sessions()[0]);
-  auto cpu_legend = new Widgets::CPULegend(this);
+  auto cpu_legend = new Widgets::Legend(this, {
+    { "user", "268bd2" },
+    { "nice", "2aa198" },
+    { "system", "b58900" },
+    { "idle", "859900" },
+    { "iowait", "dc322f" },
+    { "irq", "d33682" },
+    { "softirq", "6c71c4" },
+  });
+
   cpu_region->addWidget(cpu, 1);
   cpu_region->addWidget(cpu_legend);
   top->addLayout(cpu_region, 0, 0);
 
+  auto network_region = new QBoxLayout(QBoxLayout::TopToBottom);
   network = new Widgets::Network(this, this->state.get_sessions()[0]);
-  top->addWidget(network, 1, 0);
+  auto network_legend = new Widgets::Legend(this, {
+    { "rx", "859900" },
+    { "tx", "cb4b16" },
+  });
+  network_region->addWidget(network, 1);
+  network_region->addWidget(network_legend);
+  top->addLayout(network_region, 1, 0);
 
   top->setRowStretch(0, 1);
   top->setRowStretch(1, 1);
