@@ -1,12 +1,10 @@
 #include "backend/session.h"
 
-#define TICK_SIZE 20
-
 using namespace TDB;
 using namespace std;
 
-Session::Session(std::unique_ptr<Executor> exec) : _aggr(new Aggregator(std::move(exec))) {
-  ticks.resize(TICK_SIZE);
+Session::Session(std::unique_ptr<Executor> exec, int size) : _aggr(new Aggregator(std::move(exec))) {
+  ticks.resize(size);
 }
 
 void Session::update() {

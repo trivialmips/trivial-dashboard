@@ -13,7 +13,7 @@ namespace TDB {
     Q_OBJECT
 
     public:
-      Frame();
+      Frame(std::optional<std::tuple<std::string, std::string, int>> remote, int size);
       State state;
 
     public slots:

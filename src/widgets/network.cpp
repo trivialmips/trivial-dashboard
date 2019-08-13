@@ -29,7 +29,10 @@ Network::Network(QWidget *parent, const std::shared_ptr<Session> session, string
   }, "cb4b16");
 
   auto layout = new QBoxLayout(QBoxLayout::LeftToRight);
+  layout->setSpacing(0);
+  layout->setContentsMargins(0, 0, 0, 0);
   layout->addWidget(rx, 1);
+  layout->addSpacing(5);
   layout->addWidget(tx, 1);
   this->setLayout(layout);
 }

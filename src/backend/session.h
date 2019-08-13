@@ -11,7 +11,7 @@
 namespace TDB {
   class Session {
     public:
-      Session(std::unique_ptr<Executor> exec);
+      Session(std::unique_ptr<Executor> exec, int size = 20);
       void update();
       const std::deque<std::optional<tick_t>>& get_ticks() const;
     private:

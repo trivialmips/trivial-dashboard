@@ -16,7 +16,7 @@
 using namespace TDB;
 using namespace std;
 
-Frame::Frame() {
+Frame::Frame(std::optional<tuple<std::string, std::string, int>> remote, int session_size) {
   this->setWindowTitle("Trivial-Dashboard");
 
   /*
@@ -24,7 +24,12 @@ Frame::Frame() {
   hi->setAlignment(Qt::AlignCenter);
   */
 
-  this->state.open_local_session();
+  this->state.set_default_size(session_size);
+  if(remote) {
+    this->state.open_ssh_session(get<0>(*remote), get<1>(*remote), get<2>(*remote));
+  } else {
+    this->state.open_local_session();
+  }
 
   auto timer = new QTimer(this);
   timer->setInterval(1000);
@@ -57,6 +62,7 @@ Frame::Frame() {
   top->addLayout(cpu_region, 0, 0);
 
   auto network_region = new QBoxLayout(QBoxLayout::TopToBottom);
+  network_region->setSpacing(5);
   network = new Widgets::Network(this, this->state.get_sessions()[0]);
   auto network_legend = new Widgets::Legend(this, {
     { "rx", "859900" },
