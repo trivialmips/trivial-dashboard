@@ -6,6 +6,7 @@
 #include <memory>
 #include <iostream>
 #include <string>
+#include <functional>
 
 #include <QWidget>
 #include <QLayout>
