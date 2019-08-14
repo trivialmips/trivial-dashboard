@@ -12,7 +12,7 @@ SET(CMAKE_CXX_COMPILER "${TDB_BR_OUTPUT}/host/bin/mipsel-linux-g++")
 
 # SET(CMAKE_SYSROOT "${TDB_BR_OUTPUT}/target")
 
-SET(CMAKE_FIND_ROOT_PATH "${TDB_BR_OUTPUT}/staging:${TDB_BR_OUTPUT}/target")
+SET(CMAKE_FIND_ROOT_PATH "${TDB_BR_OUTPUT}/staging;${TDB_BR_OUTPUT}/target")
 
 # search for programs in the build host directories
 SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
