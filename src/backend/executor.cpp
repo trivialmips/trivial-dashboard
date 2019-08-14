@@ -56,7 +56,6 @@ SSHExecutor::~SSHExecutor() {
 }
 
 string SSHExecutor::exec(string cmd) {
-  cout<<"EXEC"<<endl;
   ssh_channel chan = ssh_channel_new(_ssh);
   if(chan == NULL)
     throw std::runtime_error("Unable to create SSH channel");
@@ -92,9 +91,6 @@ string SSHExecutor::exec(string cmd) {
   ssh_channel_send_eof(chan);
   ssh_channel_close(chan);
   ssh_channel_free(chan);
-
-  cout<<"READ:"<<endl;
-  cout<<result<<endl;
 
   return result;
 }

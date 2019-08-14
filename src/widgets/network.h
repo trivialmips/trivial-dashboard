@@ -2,6 +2,7 @@
 #define __NETWORK_H__
 
 #include "state.h"
+#include "util.h"
 
 #include <memory>
 #include <iostream>
@@ -50,24 +51,12 @@ namespace TDB::Widgets {
             converted.emplace_back(cur);
           }
         }
-        std::cout<<max_tick<<std::endl;
 
         // Compute scale
         uint64_t scale = 125; // 1Kbps
         while(scale < max_tick) scale *= 10;
 
-        uint64_t scale_number = scale / 125;
-        uint64_t scale_unit = 0;
-        while(scale_number >= 1000) {
-          scale_number /= 1000;
-          scale_unit += 1;
-        }
-        std::string scale_hint = std::to_string(scale_number);
-        if(scale_unit == 0) scale_hint += "Kbps";
-        else if(scale_unit == 1) scale_hint += "Mbps";
-        else if(scale_unit == 2) scale_hint += "Gbps";
-        else if(scale_unit == 3) scale_hint += "Tbps";
-        // Ok I guess we won't have Pbps
+        std::string scale_hint = transfer_text(scale * 8);
 
         std::optional<uint64_t> last_opt;
 
@@ -110,7 +99,6 @@ namespace TDB::Widgets {
         }
 
         // Draw scale
-        std::cout<<"SCALE: "<<scale_hint<<std::endl;
         QPen text_pen(QColor("#839496"));
         painter.setPen(text_pen);
         QFont font = painter.font();

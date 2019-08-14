@@ -18,10 +18,13 @@ namespace TDB {
       void open_ssh_session(std::string host, std::string user, int port = 22);
       void set_default_size(int size);
       std::vector<std::shared_ptr<Session>>& get_sessions();
+      void activate(int i);
+      std::shared_ptr<Session> active_session();
 
     private:
       std::vector<std::shared_ptr<Session>> sessions;
       int _default_size = 20;
+      int active = -1;
   };
 }
 

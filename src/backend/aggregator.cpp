@@ -129,7 +129,6 @@ network_stat_t Aggregator::fetch_network_stat() {
     if(!ss) break;
 
     name.pop_back();
-    cout<<"GOT IF: "<<name<<endl;
 
     ss>>if_stat.rx>>junk>>junk>>junk>>junk>>junk>>junk>>junk>>if_stat.tx;
     std::getline(ss, junk);
