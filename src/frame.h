@@ -12,6 +12,9 @@
 #include <QBoxLayout>
 #include <QLabel>
 #include <QStackedWidget>
+#include <QDebug>
+
+#include <qtermwidget5/qtermwidget.h>
 
 #include <vector>
 
@@ -30,14 +33,17 @@ namespace TDB {
       void exit();
       void tick();
 
-    private:
       void gotoHomeView();
       void gotoCPUView();
       void gotoNetworkView();
+      void gotoTermView();
 
       void updateCoreLabels();
       void updateIfLabels();
 
+      void termKeyPressed(QKeyEvent *ev);
+
+    private:
       Widgets::CPU *cpu;
       Widgets::Network *network;
 
@@ -50,6 +56,7 @@ namespace TDB {
       QBoxLayout *home_layout = nullptr;
       QGridLayout *cpu_layout = nullptr, *network_layout = nullptr;
       QWidget *home_widget, *cpu_widget, *network_widget;
+      QTermWidget *term_widget;
       QStackedWidget *container;
       QLabel *title;
   };

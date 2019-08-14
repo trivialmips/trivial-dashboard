@@ -59,6 +59,17 @@ Frame::Frame(std::optional<tuple<std::string, std::string, int>> remote, int ses
     this->state.open_local_session();
   }
 
+  // Init term
+  term_widget = new QTermWidget(0, this);
+  term_widget->setScrollBarPosition(QTermWidget::ScrollBarRight);
+  term_widget->setColorScheme("Solarized");
+  QFont term_font = this->font();
+  term_font.setPixelSize(14);
+  term_widget->setFont(term_font);
+
+  connect(term_widget, SIGNAL(finished()), this, SLOT(exit()));
+  connect(term_widget, SIGNAL(termKeyPressed(QKeyEvent *)), this, SLOT(termKeyPressed(QKeyEvent *)));
+
   auto timer = new QTimer(this);
   timer->setInterval(1000);
   connect(timer, SIGNAL(timeout()), this, SLOT(tick()));
@@ -103,10 +114,12 @@ Frame::Frame(std::optional<tuple<std::string, std::string, int>> remote, int ses
   container->addWidget(home_widget);
   container->addWidget(cpu_widget);
   container->addWidget(network_widget);
+  container->addWidget(term_widget);
 
   home_widget->show();
   cpu_widget->hide();
   network_widget->hide();
+  term_widget->hide();
 
   auto palette = container->palette();
   palette.setColor(container->backgroundRole(), "#002b36");
@@ -121,11 +134,13 @@ Frame::Frame(std::optional<tuple<std::string, std::string, int>> remote, int ses
   home_widget->setFixedSize(640, 480);
   cpu_widget->setFixedSize(640, 480);
   network_widget->setFixedSize(640, 480);
+  term_widget->setFixedSize(640, 480);
 
   stringstream ss;
   ss<<size.width()<<"x"<<size.height();
 
   // hi->setText(QString("Hello, Nontrivial-MIPS!\n") + ss.str().c_str());
+
 }
 
 bool Frame::eventFilter(QObject *obj, QEvent *ev) {
@@ -137,6 +152,8 @@ bool Frame::eventFilter(QObject *obj, QEvent *ev) {
       this->gotoNetworkView();
     else if(keyEv->key() == Qt::Key_H)
       this->gotoHomeView();
+    else if(keyEv->key() == Qt::Key_T)
+      this->gotoTermView();
     else if(keyEv->key() == Qt::Key_Q)
       this->exit();
 
@@ -205,9 +222,12 @@ void Frame::gotoCPUView() {
     this->updateCoreLabels();
   }
 
+  this->setFocus(Qt::MouseFocusReason);
+
   home_widget->hide();
   cpu_widget->show();
   network_widget->hide();
+  term_widget->hide();
 }
 
 void Frame::gotoNetworkView() {
@@ -258,17 +278,35 @@ void Frame::gotoNetworkView() {
     this->updateIfLabels();
   }
 
+  this->setFocus(Qt::MouseFocusReason);
+
   home_widget->hide();
   cpu_widget->hide();
   network_widget->show();
+  term_widget->hide();
 }
 
 void Frame::gotoHomeView() {
   this->title->setText(QString(string("Trivial-Dashboard").c_str()));
 
+  this->setFocus(Qt::MouseFocusReason);
+
   home_widget->show();
   cpu_widget->hide();
   network_widget->hide();
+  term_widget->hide();
+}
+
+void Frame::gotoTermView() {
+  this->title->setText(QString((string("Trivial-Dashboard") + " | Term").c_str()));
+
+  home_widget->hide();
+  cpu_widget->hide();
+  network_widget->hide();
+  term_widget->show();
+
+  term_widget->startShellProgram();
+  term_widget->setFocus(Qt::MouseFocusReason);
 }
 
 void Frame::updateCoreLabels() {
@@ -306,4 +344,10 @@ void Frame::updateIfLabels() {
 
     if_labels[i]->setText(label.str().c_str());
   }
+}
+
+void Frame::termKeyPressed(QKeyEvent *ev) {
+  qDebug()<<ev;
+  if(ev->key() == Qt::Key_H && (ev->modifiers() & Qt::ControlModifier) && (ev->modifiers() & Qt::ShiftModifier))
+    this->gotoHomeView();
 }
