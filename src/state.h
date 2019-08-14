@@ -3,6 +3,8 @@
 
 #include "backend/session.h"
 
+#include "libssh/libssh.h"
+
 #include <memory>
 #include <vector>
 #include <string>
@@ -15,7 +17,7 @@ namespace TDB {
     public:
       void update();
       void open_local_session();
-      void open_ssh_session(std::string host, std::string user, int port = 22);
+      std::pair<ssh_channel, std::mutex *> open_ssh_session(std::string host, std::string user, int port = 22);
       void set_default_size(int size);
       std::vector<std::shared_ptr<Session>>& get_sessions();
       void activate(int i);

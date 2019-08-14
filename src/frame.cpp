@@ -1,5 +1,6 @@
 #include "frame.h"
 #include "widgets/legend.h"
+#include "widgets/sshterm.h"
 #include "util.h"
 
 #include <QApplication>
@@ -12,6 +13,8 @@
 #include <QColor>
 #include <QPushButton>
 #include <QKeyEvent>
+
+#include <libssh/libssh.h>
 
 #include <iostream>
 #include <sstream>
@@ -54,13 +57,14 @@ Frame::Frame(std::optional<tuple<std::string, std::string, int>> remote, int ses
 
   this->state.set_default_size(session_size);
   if(remote) {
-    this->state.open_ssh_session(get<0>(*remote), get<1>(*remote), get<2>(*remote));
+    auto [chan, ssh_mutex] = this->state.open_ssh_session(get<0>(*remote), get<1>(*remote), get<2>(*remote));
+    term_widget = new Widgets::SSHTerm(this, chan, ssh_mutex);
   } else {
     this->state.open_local_session();
+    term_widget = new QTermWidget(this);
   }
 
   // Init term
-  term_widget = new QTermWidget(0, this);
   term_widget->setScrollBarPosition(QTermWidget::ScrollBarRight);
   term_widget->setColorScheme("Solarized");
   QFont term_font = this->font();
@@ -305,7 +309,6 @@ void Frame::gotoTermView() {
   network_widget->hide();
   term_widget->show();
 
-  term_widget->startShellProgram();
   term_widget->setFocus(Qt::MouseFocusReason);
 }
 

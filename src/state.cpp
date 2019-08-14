@@ -17,11 +17,15 @@ void State::open_local_session() {
   if(this->active == -1) this->active = 0;
 }
 
-void State::open_ssh_session(std::string host, std::string user, int port) {
+pair<ssh_channel, mutex *> State::open_ssh_session(std::string host, std::string user, int port) {
   unique_ptr<SSHExecutor> exec(new SSHExecutor(host, user, port));
+  auto result = exec->interactive_channel();
+  auto ssh_mutex = exec->ssh_mutex();
   this->sessions.emplace_back(new Session(std::move(exec), _default_size));
 
   if(this->active == -1) this->active = 0;
+
+  return { result, ssh_mutex };
 }
 
 std::vector<std::shared_ptr<Session>>& State::get_sessions() {
