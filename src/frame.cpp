@@ -351,6 +351,14 @@ void Frame::updateIfLabels() {
 
 void Frame::termKeyPressed(QKeyEvent *ev) {
   qDebug()<<ev;
-  if(ev->key() == Qt::Key_H && (ev->modifiers() & Qt::ControlModifier) && (ev->modifiers() & Qt::ShiftModifier))
-    this->gotoHomeView();
+  if((ev->modifiers() & Qt::AltModifier) && (ev->modifiers() & Qt::ShiftModifier)) {
+    if(ev->key() == Qt::Key_H)
+      this->gotoHomeView();
+    else if(ev->key() == Qt::Key_F)
+      this->term_widget->toggleShowSearchBar();
+    else if(ev->key() == Qt::Key_C)
+      this->term_widget->copyClipboard();
+    else if(ev->key() == Qt::Key_V)
+      this->term_widget->pasteClipboard();
+  }
 }
