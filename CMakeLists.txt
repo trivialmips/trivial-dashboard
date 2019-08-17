@@ -33,3 +33,5 @@ add_executable(tdb ${SRC_LIST} ${HDR_LIST} font.o)
 
 target_link_libraries(tdb Qt5::Core Qt5::Widgets Threads::Threads)
 target_link_libraries(tdb ${LIBSSH_LIBRARIES} ${QTermWidget_LIBRARIES})
+
+install(TARGETS tdb DESTINATION bin)
