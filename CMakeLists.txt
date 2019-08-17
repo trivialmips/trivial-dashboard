@@ -23,11 +23,13 @@ include_directories(src)
 include_directories(${LIBSSH_INCLUDE})
 include_directories(${QTermWidget_INCLUDE})
 
-add_executable(tdb ${SRC_LIST} ${HDR_LIST})
+add_custom_command(
+  OUTPUT font.o
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  COMMAND ${CMAKE_LINKER} -r -b binary -o ${CMAKE_BINARY_DIR}/font.o res/fonts/source-code-pro.tff
+  DEPENDS res/fonts/source-code-pro.tff)
+
+add_executable(tdb ${SRC_LIST} ${HDR_LIST} font.o)
 
 target_link_libraries(tdb Qt5::Core Qt5::Widgets Threads::Threads)
 target_link_libraries(tdb ${LIBSSH_LIBRARIES} ${QTermWidget_LIBRARIES})
-
-add_custom_command(TARGET tdb PRE_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy_directory
-  ${CMAKE_SOURCE_DIR}/res $<TARGET_FILE_DIR:tdb>/res)

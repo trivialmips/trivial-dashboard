@@ -5,6 +5,7 @@
 #include <QFontDatabase>
 #include <QFont>
 #include <QString>
+#include <QByteArray>
 #include <QCommandLineParser>
 
 #include <optional>
@@ -12,11 +13,15 @@
 
 using namespace std;
 
+extern uint8_t font_start[] asm("_binary_res_fonts_source_code_pro_tff_start");
+extern uint8_t font_end[] asm("_binary_res_fonts_source_code_pro_tff_end");
+
 int main(int argc, char **argv) {
   QApplication app(argc, argv);
 
   // Load fonts
-  int fontId = QFontDatabase::addApplicationFont("./res/fonts/source-code-pro.tff");
+  QByteArray fontData((const char *) font_start, font_end - font_start);
+  int fontId = QFontDatabase::addApplicationFontFromData(fontData);
   QString fontName = QFontDatabase::applicationFontFamilies(fontId).at(0);
   QFont font(fontName);
   font.setPixelSize(24);
